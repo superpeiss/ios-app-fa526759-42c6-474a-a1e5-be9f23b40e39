@@ -55,7 +55,7 @@ class QuoteManager: ObservableObject {
         dateFormatter.dateFormat = "yyyyMMdd"
         let dateString = dateFormatter.string(from: Date())
 
-        let sequenceNumber = (savedQuotes.count + 1).formatted(.number.precision(.integerLength(4)))
+        let sequenceNumber = String(format: "%04d", savedQuotes.count + 1)
 
         return "QT-\(dateString)-\(sequenceNumber)"
     }
