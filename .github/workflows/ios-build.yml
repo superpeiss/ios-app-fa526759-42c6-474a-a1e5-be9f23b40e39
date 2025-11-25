@@ -25,21 +25,29 @@ jobs:
 
       - name: Build iOS app
         run: |
+          set -o pipefail
           xcodebuild -scheme IndustrialConfigurator \
             -destination 'generic/platform=iOS' \
             clean build \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
-            | tee build.log
+            2>&1 | tee build.log
+          BUILD_EXIT_CODE=${PIPESTATUS[0]}
+          echo "Build exit code: $BUILD_EXIT_CODE"
+          exit $BUILD_EXIT_CODE
 
       - name: Check build result
+        if: always()
         run: |
+          echo "=== Checking build results ==="
           if grep -q "BUILD SUCCEEDED" build.log; then
             echo "✅ Build succeeded!"
-            exit 0
+          elif grep -q "BUILD FAILED" build.log; then
+            echo "❌ Build failed - showing errors:"
+            grep -A 5 "error:" build.log || true
           else
-            echo "❌ Build failed!"
-            exit 1
+            echo "⚠️ Build status unclear - showing last 50 lines:"
+            tail -50 build.log
           fi
 
       - name: Upload build log
