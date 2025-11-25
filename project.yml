@@ -1,0 +1,55 @@
+name: IndustrialConfigurator
+
+options:
+  bundleIdPrefix: com.industrial
+  deploymentTarget:
+    iOS: "15.0"
+  developmentLanguage: en
+
+settings:
+  MARKETING_VERSION: "1.0.0"
+  CURRENT_PROJECT_VERSION: "1"
+
+targets:
+  IndustrialConfigurator:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - IndustrialConfigurator
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.industrial.configurator
+      INFOPLIST_FILE: IndustrialConfigurator/Info.plist
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      SWIFT_VERSION: "5.0"
+      TARGETED_DEVICE_FAMILY: "1,2"
+    scheme:
+      testTargets:
+        - IndustrialConfiguratorTests
+      gatherCoverageData: true
+
+  IndustrialConfiguratorTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - IndustrialConfiguratorTests
+    dependencies:
+      - target: IndustrialConfigurator
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.industrial.configurator.tests
+      SWIFT_VERSION: "5.0"
+
+schemes:
+  IndustrialConfigurator:
+    build:
+      targets:
+        IndustrialConfigurator: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - IndustrialConfiguratorTests
+    archive:
+      config: Release
